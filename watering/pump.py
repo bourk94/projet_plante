@@ -10,7 +10,7 @@ class Pump:
         GPIO.setwarnings(False)
         self.pin = pins["pumpPin"]
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(self.pin, GPIO.OUT)
         signal.signal(signal.SIGTERM, self.signal_handler)
         signal.signal(signal.SIGINT, self.signal_handler)
 
