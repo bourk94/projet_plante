@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
 import threading
 import time
+import RPi.GPIO as GPIO
+import signal
 from watering.earthMoistureSensor import EarthMoistureSensor
 from watering.pump import Pump
 from watering.motor import Motor
@@ -9,7 +12,17 @@ from DHT11 import DHT11Sensor
 from thermometer.Thermometer import Thermometer
 from light.light import Light
 from I2CLCD1602 import LCD
-from MQTT.MQTT import Mqtt
+from MQTT.scriptMQTT import Mqtt
+
+
+def signal_handler(sig, frame):
+    print('Signal received, shutting down...')
+    stop_event.set()
+
+signal.signal(signal.SIGTERM, signal_handler)
+
+
+GPIO.setmode(GPIO.BOARD)
 
 stop_event = threading.Event()
 adc_device_instance = ADCDevice()
@@ -23,7 +36,6 @@ thread_light = threading.Thread(target=Light(stop_event).loop)
 thread_lcd = threading.Thread(target=LCD(stop_event).loop)
 thread_mqtt = threading.Thread(target=Mqtt(stop_event).loop)
 
-
 def main():
     thread_earthMoistureSensor.start()
     thread_temperatureSensor.start()
@@ -32,16 +44,19 @@ def main():
     thread_lcd.start()
     thread_mqtt.start()
     while not stop_event.is_set():
+      time.sleep(1)
       if not wateringData["is_moist"]:
+        pump.pump_on()
+        time.sleep(1)
+        pump.pump_off()
         for motorPosition in motorPostions:
             motor.moveSteps(*motorPostions[motorPosition])
             time.sleep(1)
             pump.pump_on()
-            time.sleep(4)
+            time.sleep(3)
             pump.pump_off()
             time.sleep(2)
         wateringData["is_moist"] = True
-        time.sleep(1)
 
 
 

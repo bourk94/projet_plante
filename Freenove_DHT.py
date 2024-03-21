@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import RPi.GPIO as GPIO
 import time
 import signal
@@ -17,11 +18,19 @@ class DHT(object):
 	humidity = 0
 	temperature = 0
 	
-	def __init__(self, stop_event):
+	def __init__(self, pin, stop_event):
 		self.stop_event = stop_event
-		self.pin = pins["dthPin"]
+		self.pin = pin
 		self.bits = [0,0,0,0,0]
 		GPIO.setmode(GPIO.BOARD)
+		signal.signal(signal.SIGTERM, self.signal_handler)
+		signal.signal(signal.SIGINT, self.signal_handler)
+
+
+	def signal_handler(self, sig, frame):
+		GPIO.cleanup()
+		sys.exit(0)
+
 	#Read DHT sensor, store the original data in bits[]	
 	def readSensor(self,pin,wakeupDelay):
 		mask = 0x80
@@ -41,7 +50,7 @@ class DHT(object):
 		loopCnt = self.DHTLIB_TIMEOUT
 		# Waiting echo
 		t = time.time()
-		while True:
+		while not self.stop_event.is_set():
 			if (GPIO.input(pin) == GPIO.LOW):
 				break
 			if((time.time() - t) > loopCnt):
@@ -103,30 +112,30 @@ class DHT(object):
 		return result
 		
 		
-def loop():
-	dht = DHT(pins["dthPin"])
-	sumCnt = 0
-	okCnt = 0
-	while True:
-		sumCnt += 1
-		chk = dht.readDHT11()	
-		if (chk is 0):
-			okCnt += 1		
-		okRate = 100.0*okCnt/sumCnt;
-		# print("sumCnt : %d, \t okRate : %.2f%% "%(sumCnt,okRate))
-		# print("chk : %d, \t Humidity : %.2f, \t Temperature : %.2f "%(chk,dht.humidity,dht.temperature))
-		time.sleep(3)
+# def loop():
+# 	dht = DHT(pins["dthPin"])
+# 	sumCnt = 0
+# 	okCnt = 0
+# 	while not stop_event.is_set():
+# 		sumCnt += 1
+# 		chk = dht.readDHT11()	
+# 		if (chk is 0):
+# 			okCnt += 1		
+# 		okRate = 100.0*okCnt/sumCnt;
+# 		# print("sumCnt : %d, \t okRate : %.2f%% "%(sumCnt,okRate))
+# 		# print("chk : %d, \t Humidity : %.2f, \t Temperature : %.2f "%(chk,dht.humidity,dht.temperature))
+# 		time.sleep(3)
 		
-if __name__ == '__main__':
-	print ('Program is starting ... ')
-	stop_event = threading.Event()
-	try:
-		loop()
-	except KeyboardInterrupt:
-		pass
-	finally:
-		stop_event.set()
-		GPIO.cleanup()
-		exit()	
+# if __name__ == '__main__':
+# 	print ('Program is starting ... ')
+# 	stop_event = threading.Event()
+# 	try:
+# 		loop()
+# 	except KeyboardInterrupt:
+# 		pass
+# 	finally:
+# 		stop_event.set()
+# 		GPIO.cleanup()
+# 		exit()	
 		
 		

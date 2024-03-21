@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from time import sleep
 from LCD1602 import CharLCD1602
 import RPi.GPIO as GPIO

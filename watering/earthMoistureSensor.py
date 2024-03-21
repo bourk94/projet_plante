@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 from ADC.ADCDevice import *
 from data.data import *
+from util.utils import interruptible_sleep
 import time
 import threading
 
@@ -41,7 +43,7 @@ class EarthMoistureSensor:
             self.check_percent()
             self.check_moisture()
             print("Moisture : %.2f %%, is_moist : %s"%(wateringData["percent"], wateringData["is_moist"]))
-            time.sleep(wateringData["moistureSensorDelay"])
+            interruptible_sleep(wateringData["moistureSensorDelay"], self.stop_event)
 
     def destroy(self):
         self.adc.close()

@@ -12,18 +12,23 @@ class Light:
     def __init__(self, stop_event):
         self.pin = pins["lightPin"]
         self.stop_event = stop_event
+        GPIO.setwarnings(False)
         signal.signal(signal.SIGTERM, self.signal_handler)
         signal.signal(signal.SIGINT, self.signal_handler)
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.pin, GPIO.OUT)
 
+    def signal_handler(self, sig, frame):
+        GPIO.cleanup()
+        sys.exit(0)
 
     def lumiere_on(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.LOW)
         
 
     def lumiere_off(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.HIGH)
 
     def loop(self):
@@ -40,7 +45,3 @@ class Light:
 
     def cleanup(self):
         GPIO.cleanup()
-
-    def signal_handler(self, sig, frame):
-        GPIO.cleanup()
-        sys.exit(0)

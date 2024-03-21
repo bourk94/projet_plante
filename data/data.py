@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 pins = {
     "motorPins" : (12, 16, 18, 22),
     "pumpPin" : 31,
