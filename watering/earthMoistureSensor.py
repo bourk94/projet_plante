@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+sys.path.insert(0, '/home/bourk/Documents/projet_plante')
 from ADC.ADCDevice import *
 from data.data import *
 from util.utils import interruptible_sleep
@@ -29,7 +31,7 @@ class EarthMoistureSensor:
         return wateringData["percent"]
     
     def check_moisture(self):
-        if wateringData["percent"] > 5:
+        if wateringData["percent"] > wateringData["wateringPercent"]:
             wateringData["is_moist"] = True
         else:
             wateringData["is_moist"] = False

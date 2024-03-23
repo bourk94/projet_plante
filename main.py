@@ -14,6 +14,7 @@ from light.light import Light
 from LCD.I2CLCD1602 import LCD
 from MQTT.scriptMQTT import Mqtt
 from LED.Led import Led
+from errors.internet import Internet
 
 
 def signal_handler(sig, frame):
@@ -21,6 +22,7 @@ def signal_handler(sig, frame):
     stop_event.set()
 
 signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
 
 
 GPIO.setmode(GPIO.BOARD)
@@ -30,41 +32,39 @@ adc_device_instance = ADCDevice()
 motor = Motor()
 pump = Pump()
 
-#thread_earthMoistureSensor = threading.Thread(target=EarthMoistureSensor(adc_device_instance, stop_event).loop)
+thread_earthMoistureSensor = threading.Thread(target=EarthMoistureSensor(adc_device_instance, stop_event).loop)
 thread_temperatureSensor = threading.Thread(target=Thermometer(adc_device_instance, stop_event).loopThermometer)
 thread_humiditySensor = threading.Thread(target=DHT11Sensor(stop_event).loopDHT11)
+thread_internet_error = threading.Thread(target=Internet(stop_event).loop)
 thread_light = threading.Thread(target=Light(stop_event).loop)
 thread_led = threading.Thread(target=Led(stop_event).loop)
 thread_lcd = threading.Thread(target=LCD(stop_event).loop)
 #thread_mqtt = threading.Thread(target=Mqtt(stop_event).loop)
 
 def main():
-    #thread_earthMoistureSensor.start()
+    thread_earthMoistureSensor.start()
     thread_temperatureSensor.start()
     thread_humiditySensor.start()
+    thread_internet_error.start()
     thread_light.start()
     thread_lcd.start()
     thread_led.start()
-    while not stop_event.is_set():
-        time.sleep(1)
     #thread_mqtt.start()
     # while not stop_event.is_set():
     #   time.sleep(1)
-    #   if not wateringData["is_moist"] and wateringData["percent"] < 5:
-    #     pump.pump_on()
-    #     time.sleep(1)
-    #     pump.pump_off()
+    #   if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"]:
     #     for motorPosition in motorPostions:
     #         motor.moveSteps(*motorPostions[motorPosition])
     #         time.sleep(1)
     #         pump.pump_on()
-    #         time.sleep(3)
+    #         time.sleep(1.7)
     #         pump.pump_off()
     #         time.sleep(2)
     #     wateringData["is_moist"] = True
     # if stop_event.is_set():
     #     pump.cleanup()
-        
+    while not stop_event.is_set():
+        time.sleep(1)   
 
 if __name__ == "__main__":
     try:
@@ -77,9 +77,10 @@ if __name__ == "__main__":
         #thread_mqtt.join()
         thread_temperatureSensor.join()
         thread_humiditySensor.join()
+        thread_internet_error.join()
         thread_light.join()
         thread_led.join()
         thread_lcd.join()
-        #thread_earthMoistureSensor.join()
+        thread_earthMoistureSensor.join()
         adc_device_instance.close()
         exit()

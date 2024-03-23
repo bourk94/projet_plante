@@ -19,8 +19,11 @@ class LCD:
     def loop(self):
         self.lcd1602.init_lcd()
         while not self.stop_event.is_set():
-            self.lcd1602.write(0, 0, 'Temp. : ' + str(round(roomData["temperature"], 2)) + ' C')
-            self.lcd1602.write(0, 1, 'Humidity: ' + str(round(roomData["humidity"], 2)) + ' %')
+            self.lcd1602.write(0, 0, 'Temp. : {:.2f} C'.format(roomData["temperature"]))
+            if roomData["humidity"] < 10:
+                self.lcd1602.write(0, 1, 'Hum.  : {:.2f}  %'.format(roomData["humidity"]))
+            else:
+                self.lcd1602.write(0, 1, 'Hum.  : {:.2f} %'.format(roomData["humidity"]))
             sleep(1)
 
     def destroy(self):

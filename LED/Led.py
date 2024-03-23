@@ -30,14 +30,50 @@ class Led:
 
     def convert_to_base_100(self, value):
         return (value / 255) * 100
+    
+    def green_led(self):
+        self.setColor(self.convert_to_base_100(ledColor["green"]["r"]), self.convert_to_base_100(ledColor["green"]["g"]), self.convert_to_base_100(ledColor["green"]["b"]))
+    
+    def yellow_led(self):
+        self.setColor(self.convert_to_base_100(ledColor["yellow"]["r"]), self.convert_to_base_100(ledColor["yellow"]["g"]), self.convert_to_base_100(ledColor["yellow"]["b"]))
+
+    def red_led(self):
+        self.setColor(self.convert_to_base_100(ledColor["red"]["r"]), self.convert_to_base_100(ledColor["red"]["g"]), self.convert_to_base_100(ledColor["red"]["b"]))
 
     def loop(self):
         while not self.stop_event.is_set() :
-            self.setColor(self.convert_to_base_100(ledColor["green"]["r"]), self.convert_to_base_100(ledColor["green"]["g"]), self.convert_to_base_100(ledColor["green"]["b"]))
-            time.sleep(1)
+            if errors["critical_error"]:
+                self.red_led()
+            elif errors["non_critical_error"]:
+                self.yellow_led()
+            else:
+                self.green_led()
+        if self.stop_event.is_set():
+            self.destroy()
 
     def destroy(self):
         self.red.stop()
         self.green.stop()
         self.blue.stop()
         GPIO.cleanup()
+
+if __name__ == '__main__':
+    # Create a stop event
+    stop_event = threading.Event()
+
+    # Create an instance of the Led class
+    led_instance = Led(stop_event)
+
+    print('Program is starting ... ')
+    try:
+        led_instance.loop()
+    except KeyboardInterrupt:
+        print('Program is stopped by the user')
+        led_instance.destroy()
+        GPIO.cleanup()
+        sys.exit(0)
+    except Exception as e:
+        print('An error occurred: ', e)
+        led_instance.destroy()
+        GPIO.cleanup()
+        sys.exit(1)

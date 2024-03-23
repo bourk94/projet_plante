@@ -21,8 +21,10 @@ motorPostions = {
 }
 
 
-wateringData = { "is_moist" : True,
-            "percent" : 100,
+wateringData = { 
+            "is_moist" : True, # True si la terre est humide, False si la terre est sèche
+            "percent" : 100, # Humidité de la terre
+            "wateringPercent" : 15, # Pourcentage d'humidité en dessous duquel on arrose
             "moistureSensorDelay" : 3600,
 }
 
@@ -34,4 +36,16 @@ ledColor = {
     "red" : { "r" : 75, "g" : 0, "b" : 0 },
     "green" : { "r" : 0, "g" : 75, "b" : 0 },
     "yellow" : { "r" : 171, "g" : 150, "b" : 0 },
+}
+
+errors = {
+    "internet" : False,
+    "mqtt" : False,
+    "moteur" : False,
+    "ompe" : False,
+    "DTH" : False,
+    "lumière" : False,
+    "DEL" : False,
+    "critical_error" : False,
+    "non_critical_error" : False,
 }

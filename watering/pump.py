@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+import sys
+sys.path.insert(0, '/home/bourk/Documents/projet_plante')
 import RPi.GPIO as GPIO
 import sys
 import signal
+import time
+import threading
 from data.data import *
 
 class Pump:
