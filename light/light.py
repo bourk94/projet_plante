@@ -21,13 +21,13 @@ class Light:
     def signal_handler(self, sig, frame):
         self.stop_event.set()
 
-    def lumiere_on(self):
+    def light_on(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.output(self.pin, GPIO.LOW)
         
 
-    def lumiere_off(self):
+    def light_off(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.output(self.pin, GPIO.HIGH)
@@ -38,11 +38,11 @@ class Light:
             current_time = datetime.datetime.now().time()
             if current_time.hour >= 5 and current_time.hour < 17:
                 if current_time.hour >= 12  and current_time.minute > 30:
-                    self.lumiere_off()
+                    self.light_off()
                 else:
-                    self.lumiere_on()
+                    self.light_on()
             else:
-                self.lumiere_off()
+                self.light_off()
         if self.stop_event.is_set():
             self.cleanup()
 
