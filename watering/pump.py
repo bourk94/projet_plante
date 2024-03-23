@@ -14,6 +14,9 @@ class Pump:
         signal.signal(signal.SIGTERM, self.signal_handler)
         signal.signal(signal.SIGINT, self.signal_handler)
 
+    def signal_handler(self, sig, frame):
+        self.cleanup()
+
     def pump_on(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.HIGH)
@@ -25,11 +28,5 @@ class Pump:
         GPIO.output(self.pin, GPIO.HIGH)
 
     def cleanup(self):
+        self.pump_off()
         GPIO.cleanup()
-
-    def signal_handler(self, sig, frame):
-        try:    
-                GPIO.cleanup()
-        except RuntimeError:
-            pass
-

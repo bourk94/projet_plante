@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import sys
+sys.path.insert(0, '/home/bourk/Documents/projet_plante/DHT')
+sys.path.insert(0, '/home/bourk/Documents/projet_plante')
 import time
 import threading
 import Freenove_DHT as DHT
@@ -17,17 +20,3 @@ class DHT11Sensor:
                 roomData["humidity"] = self.dht.humidity
                 print("Humidity: %.2f %%" % roomData["humidity"])
             time.sleep(2)
-
-# if __name__ == '__main__':
-#     stop_event = threading.Event()
-#     DHTPin = pins["dthPin"]
-#     dht_sensor = DHT11Sensor(DHTPin)
-
-#     print('Program is starting ... ')
-#     try:
-#         dht_sensor.loopDHT11()
-#     except KeyboardInterrupt:
-#         pass
-#     finally:
-#         stop_event.set()
-#         exit()

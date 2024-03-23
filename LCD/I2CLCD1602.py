@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+import sys
+sys.path.insert(0, '/home/bourk/Documents/projet_plante/LCD')
+sys.path.insert(0, '/home/bourk/Documents/projet_plante')
 from time import sleep
-from LCD1602 import CharLCD1602
+import threading
 import RPi.GPIO as GPIO
+from LCD1602 import CharLCD1602
 from data.data import *
+
 
 
 class LCD:
@@ -21,3 +26,13 @@ class LCD:
     def destroy(self):
         self.lcd1602.clear()
         GPIO.cleanup()
+
+if __name__ == '__main__':
+    print ('Program is starting ... ')
+    try:
+        stop_event = threading.Event()
+        lcd = LCD(stop_event)
+        lcd.loop()
+    except KeyboardInterrupt:
+        lcd.destroy()
+        print("Ending program")
