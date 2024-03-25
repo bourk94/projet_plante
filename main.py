@@ -56,21 +56,19 @@ def main():
     thread_motionSensor.start()
     thread_camera.start()
     #thread_mqtt.start()
-    # while not stop_event.is_set():
-    #   time.sleep(1)
-    #   if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"]:
-    #     for motorPosition in motorPostions:
-    #         motor.moveSteps(*motorPostions[motorPosition])
-    #         time.sleep(1)
-    #         pump.pump_on()
-    #         time.sleep(1.7)
-    #         pump.pump_off()
-    #         time.sleep(2)
-    #     wateringData["is_moist"] = True
-    # if stop_event.is_set():
-    #     pump.cleanup()
     while not stop_event.is_set():
-        time.sleep(1)   
+      time.sleep(1)
+      if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"]:
+        for motorPosition in motorPostions:
+            motor.moveSteps(*motorPostions[motorPosition])
+            time.sleep(1)
+            pump.pump_on()
+            time.sleep(1.7)
+            pump.pump_off()
+            time.sleep(2)
+        wateringData["is_moist"] = True
+    if stop_event.is_set():
+        pump.cleanup()
 
 if __name__ == "__main__":
     try:
