@@ -28,6 +28,10 @@ class EarthMoistureSensor:
 
     def check_percent(self):
         wateringData["percent"] = (100 * (218 - max(self.values)) / 109)
+        if wateringData["percent"] > 100:
+            wateringData["percent"] = 100
+        if wateringData["percent"] < 0:
+            wateringData["percent"] = 0
         return wateringData["percent"]
     
     def check_moisture(self):
