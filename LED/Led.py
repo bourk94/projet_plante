@@ -10,9 +10,9 @@ class Led:
     def __init__(self, stop_event):
         self.stop_event = stop_event
         GPIO.setmode(GPIO.BOARD)
-        self.red_pin = pins["ledPins"]["red"]
-        self.green_pin = pins["ledPins"]["green"]
-        self.blue_pin = pins["ledPins"]["blue"]
+        self.red_pin = pins["rgbLedPins"]["red"]
+        self.green_pin = pins["rgbLedPins"]["green"]
+        self.blue_pin = pins["rgbLedPins"]["blue"]
         GPIO.setup(self.red_pin, GPIO.OUT)
         GPIO.setup(self.green_pin, GPIO.OUT)
         GPIO.setup(self.blue_pin, GPIO.OUT)
@@ -42,9 +42,9 @@ class Led:
 
     def loop(self):
         while not self.stop_event.is_set() :
-            if errors["critical_error"]:
+            if any(critical_errors.values()):
                 self.red_led()
-            elif errors["non_critical_error"]:
+            elif any(none_critical_errors.values()):
                 self.yellow_led()
             else:
                 self.green_led()

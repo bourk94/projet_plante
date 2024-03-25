@@ -4,7 +4,9 @@ pins = {
     "pumpPin" : 38,
     "dthPin" : 37,
     "lightPin" : 40,
-    "ledPins" : { "red" : 33, "green" : 31, "blue" : 29 },
+    "rgbLedPins" : { "red" : 33, "green" : 31, "blue" : 29 },
+    "motionSensor" : 32,
+    "motionSensorLed" : 36,
 }
 
 mqttConfig = {
@@ -38,14 +40,28 @@ ledColor = {
     "yellow" : { "r" : 171, "g" : 150, "b" : 0 },
 }
 
-errors = {
+critical_errors = {
     "internet" : False,
     "mqtt" : False,
-    "moteur" : False,
-    "ompe" : False,
+    "motor" : False,
+    "camera" : False,
+    "pump" : False,
     "DTH" : False,
-    "lumière" : False,
-    "DEL" : False,
-    "critical_error" : False,
-    "non_critical_error" : False,
+    "light" : False,
+    "LED" : False,
+}
+
+none_critical_errors = {
+    "internet" : False,
+    "mqtt" : False,
+    "motor" : False,
+    "camera" : False,
+    "pump" : False,
+    "DTH" : False,
+    "light" : False,
+    "LED" : False,
+}
+
+security = {
+    "intruder" : False,
 }

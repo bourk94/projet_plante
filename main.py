@@ -15,6 +15,8 @@ from LCD.I2CLCD1602 import LCD
 from MQTT.scriptMQTT import Mqtt
 from LED.Led import Led
 from errors.internet import Internet
+from camera.camera import Camera
+from motionSensor.motionSensor import MotionSensor
 
 
 def signal_handler(sig, frame):
@@ -39,6 +41,8 @@ thread_internet_error = threading.Thread(target=Internet(stop_event).loop)
 thread_light = threading.Thread(target=Light(stop_event).loop)
 thread_led = threading.Thread(target=Led(stop_event).loop)
 thread_lcd = threading.Thread(target=LCD(stop_event).loop)
+thread_motionSensor = threading.Thread(target=MotionSensor(stop_event).loop)
+thread_camera = threading.Thread(target=Camera(stop_event).loop)
 #thread_mqtt = threading.Thread(target=Mqtt(stop_event).loop)
 
 def main():
@@ -49,6 +53,8 @@ def main():
     thread_light.start()
     thread_lcd.start()
     thread_led.start()
+    thread_motionSensor.start()
+    thread_camera.start()
     #thread_mqtt.start()
     # while not stop_event.is_set():
     #   time.sleep(1)
@@ -72,6 +78,9 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Exiting")
         pass
+    except Exception as e:
+        
+        print("An error occurred: ", e)
     finally:
         stop_event.set()
         #thread_mqtt.join()
@@ -81,6 +90,8 @@ if __name__ == "__main__":
         thread_light.join()
         thread_led.join()
         thread_lcd.join()
+        thread_motionSensor.join()
+        thread_camera.join()
         thread_earthMoistureSensor.join()
         adc_device_instance.close()
         exit()

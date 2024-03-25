@@ -22,11 +22,9 @@ class Internet:
         while not self.stop_event.is_set():
             time.sleep(1)
             if not self.check_internet():
-                errors["internet"] = True
-                errors["critical_error"] = True
+                critical_errors["internet"] = True
             else:
-                errors["internet"] = False
-                errors["critical_error"] = False
+                critical_errors["internet"] = False
 
 
 
