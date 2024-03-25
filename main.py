@@ -70,6 +70,7 @@ def main():
             pump.pump_off()
             time.sleep(2)
         wateringData["is_moist"] = True
+        none_critical_errors["moisture"] = False
     if stop_event.is_set():
         pump.cleanup()
 
