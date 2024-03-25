@@ -46,12 +46,3 @@ class MotionSensor:
 
     def cleanup(self):
         GPIO.cleanup()
-
-
-if __name__ == '__main__':
-    # Create a stop event
-    stop_event = threading.Event()
-
-    # Create an instance of the MotionSensor class
-    motionSensor_instance = MotionSensor(stop_event)
-    motionSensor_instance.loop()
