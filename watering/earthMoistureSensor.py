@@ -37,8 +37,10 @@ class EarthMoistureSensor:
     def check_moisture(self):
         if wateringData["percent"] > wateringData["wateringPercent"]:
             wateringData["is_moist"] = True
+            none_critical_errors["moisture"] = False
         else:
             wateringData["is_moist"] = False
+            none_critical_errors["moisture"] = True
         return wateringData["is_moist"]        
 
 
@@ -53,22 +55,3 @@ class EarthMoistureSensor:
 
     def destroy(self):
         self.adc.close()
-
-if __name__ == '__main__':
-    # Create a stop event
-    stop_event = threading.Event()
-
-    # Create an instance of the ADCDevice class before creating an instance of the EarthMoistureSensor class
-    adc_device_instance = ADCDevice()
-    earthMoistureSensor_instance = EarthMoistureSensor(adc_device_instance, stop_event)
-
-    print('Program is starting ... ')
-    try:
-        earthMoistureSensor_instance.loop()
-    except KeyboardInterrupt:
-        print("Exiting")
-        pass
-    finally:
-        stop_event.set()
-        earthMoistureSensor_instance.destroy()
-        exit()

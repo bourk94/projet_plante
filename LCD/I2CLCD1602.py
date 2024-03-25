@@ -19,23 +19,13 @@ class LCD:
     def loop(self):
         self.lcd1602.init_lcd()
         while not self.stop_event.is_set():
-            self.lcd1602.write(0, 0, 'Temp. : {:.2f} C'.format(roomData["temperature"]))
+            self.lcd1602.write(0, 0, 'Temp. : {:.2f}  C'.format(roomData["temperature"]))
             if roomData["humidity"] < 10:
-                self.lcd1602.write(0, 1, 'Hum.  : {:.2f}  %'.format(roomData["humidity"]))
+                self.lcd1602.write(0, 1, 'Hum.  : {:.2f}   %'.format(roomData["humidity"]))
             else:
-                self.lcd1602.write(0, 1, 'Hum.  : {:.2f} %'.format(roomData["humidity"]))
+                self.lcd1602.write(0, 1, 'Hum.  : {:.2f}  %'.format(roomData["humidity"]))
             sleep(1)
 
     def destroy(self):
         self.lcd1602.clear()
         GPIO.cleanup()
-
-if __name__ == '__main__':
-    print ('Program is starting ... ')
-    try:
-        stop_event = threading.Event()
-        lcd = LCD(stop_event)
-        lcd.loop()
-    except KeyboardInterrupt:
-        lcd.destroy()
-        print("Ending program")

@@ -29,12 +29,17 @@ class Camera:
         os.makedirs(intruders_directory, exist_ok=True)
         os.makedirs(growth_directory, exist_ok=True)
 
+        picture_taken = False
+
         while not self.stop_event.is_set():
             picture_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             current_time = datetime.datetime.now().time()
-            if current_time.hour == 12:
+            if current_time.hour == 12 and not picture_taken:
                 output_path = growth_directory + "image_" + picture_time + ".jpg"
                 self.capture_image(output_path)
+                picture_taken = True
+            elif current_time.hour != 12:
+                picture_taken = False
             if security["intruder"]:
                 security["intruder"] = False
                 output_path = intruders_directory + "intruder_" + picture_time + ".jpg"

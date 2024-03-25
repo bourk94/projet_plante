@@ -42,6 +42,7 @@ class Led:
 
     def loop(self):
         while not self.stop_event.is_set() :
+            time.sleep(0.1)
             if any(critical_errors.values()):
                 self.red_led()
             elif any(none_critical_errors.values()):
@@ -56,24 +57,3 @@ class Led:
         self.green.stop()
         self.blue.stop()
         GPIO.cleanup()
-
-if __name__ == '__main__':
-    # Create a stop event
-    stop_event = threading.Event()
-
-    # Create an instance of the Led class
-    led_instance = Led(stop_event)
-
-    print('Program is starting ... ')
-    try:
-        led_instance.loop()
-    except KeyboardInterrupt:
-        print('Program is stopped by the user')
-        led_instance.destroy()
-        GPIO.cleanup()
-        sys.exit(0)
-    except Exception as e:
-        print('An error occurred: ', e)
-        led_instance.destroy()
-        GPIO.cleanup()
-        sys.exit(1)

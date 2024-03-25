@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+
 pins = {
     "motorPins" : (12, 16, 18, 22),
     "pumpPin" : 38,
@@ -7,6 +9,7 @@ pins = {
     "rgbLedPins" : { "red" : 33, "green" : 31, "blue" : 29 },
     "motionSensor" : 32,
     "motionSensorLed" : 36,
+    "waterLevelSensor" : 13,
 }
 
 mqttConfig = {
@@ -28,6 +31,7 @@ wateringData = {
             "percent" : 100, # Humidité de la terre
             "wateringPercent" : 15, # Pourcentage d'humidité en dessous duquel on arrose
             "moistureSensorDelay" : 3600,
+            "is_water_level_low" : False,
 }
 
 roomData = { "humidity" : 0,
@@ -49,6 +53,7 @@ critical_errors = {
     "DTH" : False,
     "light" : False,
     "LED" : False,
+    "waterLevel" : False,
 }
 
 none_critical_errors = {
@@ -60,6 +65,7 @@ none_critical_errors = {
     "DTH" : False,
     "light" : False,
     "LED" : False,
+    "waterLevel" : False,
 }
 
 security = {

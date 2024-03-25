@@ -34,22 +34,3 @@ class Thermometer:
 
     def destroy(self):
         self.adc.close()
-
-if __name__ == '__main__':
-    # Create a stop event
-    stop_event = threading.Event()
-
-    # Create an instance of the ADCDevice class before creating an instance of the Thermometer class
-    adc_device_instance = ADCDevice()
-    thermometer_instance = Thermometer(adc_device_instance, stop_event)
-
-    print('Program is starting ... ')
-    try:
-        thermometer_instance.loopThermometer()
-    except KeyboardInterrupt:
-        print("Exiting")
-        pass
-    finally:
-        stop_event.set()
-        thermometer_instance.destroy()
-        exit()

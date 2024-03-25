@@ -17,6 +17,7 @@ from LED.Led import Led
 from errors.internet import Internet
 from camera.camera import Camera
 from motionSensor.motionSensor import MotionSensor
+from waterLevelSensor.waterLevelSensor import WaterLevelSensor
 
 
 def signal_handler(sig, frame):
@@ -43,7 +44,8 @@ thread_led = threading.Thread(target=Led(stop_event).loop)
 thread_lcd = threading.Thread(target=LCD(stop_event).loop)
 thread_motionSensor = threading.Thread(target=MotionSensor(stop_event).loop)
 thread_camera = threading.Thread(target=Camera(stop_event).loop)
-#thread_mqtt = threading.Thread(target=Mqtt(stop_event).loop)
+thread_mqtt = threading.Thread(target=Mqtt(stop_event).loop)
+thread_waterLevelSensor = threading.Thread(target=WaterLevelSensor(stop_event).loop)
 
 def main():
     thread_earthMoistureSensor.start()
@@ -55,10 +57,11 @@ def main():
     thread_led.start()
     thread_motionSensor.start()
     thread_camera.start()
-    #thread_mqtt.start()
+    thread_mqtt.start()
+    thread_waterLevelSensor.start()
     while not stop_event.is_set():
       time.sleep(1)
-      if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"]:
+      if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"] and not wateringData["is_water_level_low"]:
         for motorPosition in motorPostions:
             motor.moveSteps(*motorPostions[motorPosition])
             time.sleep(1)
@@ -81,13 +84,14 @@ if __name__ == "__main__":
         print("An error occurred: ", e)
     finally:
         stop_event.set()
-        #thread_mqtt.join()
+        thread_mqtt.join()
         thread_temperatureSensor.join()
         thread_humiditySensor.join()
         thread_internet_error.join()
         thread_light.join()
         thread_led.join()
         thread_lcd.join()
+        thread_waterLevelSensor.join()
         thread_motionSensor.join()
         thread_camera.join()
         thread_earthMoistureSensor.join()

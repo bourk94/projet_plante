@@ -126,11 +126,4 @@ def loop():
 def destroy():
     lcd1602.clear()
 lcd1602 = CharLCD1602()  
-if __name__ == '__main__':
-    print ('Program is starting ... ')
-    lcd1602.init_lcd(addr=None, bl=1)
-    try:
-        loop()
-    except KeyboardInterrupt:
-        destroy()
 

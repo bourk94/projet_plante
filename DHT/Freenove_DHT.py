@@ -110,32 +110,3 @@ class DHT(object):
 				return self.DHTLIB_OK
 			time.sleep(0.1)
 		return result
-		
-		
-# def loop():
-# 	dht = DHT(pins["dthPin"])
-# 	sumCnt = 0
-# 	okCnt = 0
-# 	while not stop_event.is_set():
-# 		sumCnt += 1
-# 		chk = dht.readDHT11()	
-# 		if (chk is 0):
-# 			okCnt += 1		
-# 		okRate = 100.0*okCnt/sumCnt;
-# 		# print("sumCnt : %d, \t okRate : %.2f%% "%(sumCnt,okRate))
-# 		# print("chk : %d, \t Humidity : %.2f, \t Temperature : %.2f "%(chk,dht.humidity,dht.temperature))
-# 		time.sleep(3)
-		
-# if __name__ == '__main__':
-# 	print ('Program is starting ... ')
-# 	stop_event = threading.Event()
-# 	try:
-# 		loop()
-# 	except KeyboardInterrupt:
-# 		pass
-# 	finally:
-# 		stop_event.set()
-# 		GPIO.cleanup()
-# 		exit()	
-		
-		
