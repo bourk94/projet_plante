@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 pins = {
     "motorPins" : (12, 16, 18, 22),
     "pumpPin" : 38,
@@ -12,19 +11,12 @@ pins = {
     "waterLevelSensor" : 13,
 }
 
-mqttConfig = {
-    "broker" : "172.16.72.221",
-    "localhost" : "127.0.0.1",
-    "port" : 1883,
-}
-
 motorPostions = {
     1 : (1, 0, 128),
     2 : (2, 0, 384),
     3 : (1, 0, 128),
     4 : (1, 0, 128),
 }
-
 
 wateringData = { 
             "is_moist" : True, # True si la terre est humide, False si la terre est sèche
