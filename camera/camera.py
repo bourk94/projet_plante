@@ -18,9 +18,7 @@ class Camera:
         try:
             subprocess.run(command, check=True)
             print("Image captured successfully:", output_path)
-            none_critical_errors["camera"] = False
         except subprocess.CalledProcessError as e:
-            none_critical_errors["camera"] = True
             print("Error while capturing image:", e)
 
     def loop(self):

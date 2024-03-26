@@ -27,12 +27,12 @@ class WaterLevelSensor:
             if currentState and not previousState:
                 print("Water level is high!")
                 previousState = True
-                wateringData["is_water_level_low"] = True
+                wateringData["is_water_level_low"] = False
                 critical_errors["waterLevel"] = False
             elif previousState and not currentState:
                 print("Water level is low!")
                 previousState = False
-                wateringData["is_water_level_low"] = False
+                wateringData["is_water_level_low"] = True
                 critical_errors["waterLevel"] = True
         if self.stop_event.is_set():
             self.cleanup()

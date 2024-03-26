@@ -10,7 +10,6 @@ class Mqtt:
         self.port = mqttConfig["port"]
         self.client = None
 
-
     def connection(self):
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         print("Connecting to broker...", self.broker)

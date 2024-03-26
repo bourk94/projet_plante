@@ -62,11 +62,16 @@ def main():
     while not stop_event.is_set():
       time.sleep(1)
       if not wateringData["is_moist"] and wateringData["percent"] < wateringData["wateringPercent"] and not wateringData["is_water_level_low"]:
+        pump.pump_on()
+        time.sleep(0.7)
+        pump.pump_off()
+        time.sleep(2)
         for motorPosition in motorPostions:
+            print("Arrosage en cours")
             motor.moveSteps(*motorPostions[motorPosition])
-            time.sleep(1)
+            time.sleep(2)
             pump.pump_on()
-            time.sleep(1.7)
+            time.sleep(1.8)
             pump.pump_off()
             time.sleep(2)
         wateringData["is_moist"] = True
